@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriFriend - แอปพลิเคชันสุขภาพ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f8f4 50%, #e8f5e9 100%);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links button {
+            background: none;
+            border: none;
+            color: #2e7d32;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .nav-links button:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #4caf50, #66bb6a) !important;
+            color: white !important;
+            padding: 0.7rem 1.5rem !important;
+            border-radius: 15px;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #f44336, #e57373) !important;
+            color: white !important;
+            padding: 0.7rem 1.5rem !important;
+            border-radius: 15px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #2e7d32, #4caf50, #66bb6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #616161;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(76, 175, 80, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            padding: 3rem;
+            border-radius: 25px;
+            text-align: center;
+            color: white;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            background: white;
+            color: #4caf50;
+            padding: 1rem;
+            border: 2px solid #4caf50;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #2e7d32, #4caf50, #66bb6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 3rem;
+        }
+
+        .bmi-card, .profile-card, .login-card, .dashboard-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .bmi-result {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(129, 199, 132, 0.1));
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .bmi-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .food-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid rgba(76, 175, 80, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(76, 175, 80, 0.3);
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .user-profile-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            border-radius: 20px;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .user-avatar {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .user-select-btn {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .user-select-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .user-list-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 3000;
+        }
+
+        .user-list-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .user-list-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(76, 175, 80, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-list-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+            border-color: #4caf50;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .status-online {
+            background: rgba(76, 175, 80, 0.2);
+            color: #2e7d32;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: 2px solid rgba(76, 175, 80, 0.2);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4caf50;
+            margin: 1rem 0;
+        }
+
+        .stat-label {
+            color: #757575;
+            font-size: 1rem;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .success-message {
+            color: #4caf50;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .filter-btn {
+            background: white;
+            color: #4caf50;
+            padding: 1rem 2rem;
+            border: 2px solid #4caf50;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .features-grid, .food-grid, .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="showPage('home')">🥗 NutriFriend</div>
+            <div class="nav-links">
+                <button onclick="showPage('home')">หน้าแรก</button>
+                <button onclick="showPage('dashboard')">📊 Dashboard</button>
+                <button onclick="showPage('bmi')">คำนวณ BMI</button>
+                <button onclick="showPage('food')">เมนูอาหาร</button>
+                <button onclick="showPage('exercise')">💪 แนะนำออกกำลังกาย</button>
+                <button onclick="showPage('profile')">โปรไฟล์</button>
+                <button id="authBtn" class="login-btn" onclick="handleAuth()">เข้าสู่ระบบ</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="homePage" class="page active">
+        <div class="container">
+            <div class="hero">
+                <h1>✨ เปลี่ยนชีวิตให้สุขภาพดี</h1>
+                <p>ควบคุมโภชนาการ ออกกำลังกายอย่างมีประสิทธิภาพ และติดตามแคลอรี่ได้อย่างง่ายดาย</p>
+                <div class="status-badge status-online">💾 ระบบบันทึกข้อมูลพร้อมใช้งาน (localStorage)</div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 style="color: #4caf50;">คำนวณ BMI</h3>
+                    <p style="color: #757575;">ตรวจสอบดัชนีมวลกายและรับคำแนะนำที่เหมาะสม พร้อมบันทึกประวัติ</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🍽️</div>
+                    <h3 style="color: #ff9800;">เมนูอาหาร</h3>
+                    <p style="color: #757575;">อาหารต่างดาวที่จินตนาการขึ้นมา พร้อมระบบเพิ่มรายการโปรด</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3 style="color: #2196f3;">บันทึกอัตโนมัติ</h3>
+                    <p style="color: #757575;">ข้อมูลทั้งหมดบันทึกใน localStorage คงอยู่แม้ปิดเว็บไซต์</p>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h2>เริ่มต้นดูแลสุขภาพวันนี้</h2>
+                <p style="font-size: 1.1rem; margin: 1rem 0 2rem 0;">เข้าสู่ระบบเพื่อปลดล็อกฟีเจอร์ทั้งหมด</p>
+                <button class="btn-primary" onclick="showPage('login')" style="max-width: 300px; margin: 0 auto;">🔐 เข้าสู่ระบบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 class="page-title" style="margin: 0;">📊 Dashboard</h2>
+                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <button id="myDashboardBtn" class="user-select-btn" onclick="returnToMyDashboard()" style="display: none; background: linear-gradient(135deg, #2196f3, #64b5f6);">
+                        🏠 Dashboard ของฉัน
+                    </button>
+                    <button class="user-select-btn" onclick="showUserList()">👥 ผู้ใช้งานอื่น</button>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.9rem; color: #757575;">ผู้ใช้งาน</div>
+                        <div id="dashboardUserName" onclick="showCurrentUserProfile()" style="font-size: 1.5rem; font-weight: bold; color: #4caf50; cursor: pointer; text-decoration: underline; transition: all 0.3s;" onmouseover="this.style.color='#2e7d32'" onmouseout="this.style.color='#4caf50'">Guest</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Daily -->
+            <div class="dashboard-card" style="margin-bottom: 2rem;">
+                <h3 style="color: #4caf50; margin-bottom: 1.5rem; font-size: 1.8rem;">📅 Dashboard Daily</h3>
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">แคลอรี่วันนี้</div>
+                        <div class="stat-value" id="dailyCalories">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">kcal</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">โปรตีนวันนี้</div>
+                        <div class="stat-value" id="dailyProtein">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">กรัม</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">คาร์โบไฮเดรตวันนี้</div>
+                        <div class="stat-value" id="dailyCarbs">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">กรัม</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">ไขมันวันนี้</div>
+                        <div class="stat-value" id="dailyFat">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">กรัม</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Weekly -->
+            <div class="dashboard-card" style="margin-bottom: 2rem;">
+                <h3 style="color: #ff9800; margin-bottom: 1.5rem; font-size: 1.8rem;">📈 Dashboard Weekly</h3>
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">แคลอรี่เฉลี่ย/วัน</div>
+                        <div class="stat-value" id="weeklyCalories">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">kcal</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">จำนวนมื้ออาหาร</div>
+                        <div class="stat-value" id="weeklyMeals">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">มื้อ</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">BMI ล่าสุด</div>
+                        <div class="stat-value" id="weeklyBMI">-</div>
+                        <div style="color: #757575; font-size: 0.9rem;">ดัชนี</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">น้ำหนักปัจจุบัน</div>
+                        <div class="stat-value" id="weeklyWeight">-</div>
+                        <div style="color: #757575; font-size: 0.9rem;">kg</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Monthly -->
+            <div class="dashboard-card">
+                <h3 style="color: #9c27b0; margin-bottom: 1.5rem; font-size: 1.8rem;">📊 Dashboard Monthly</h3>
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">แคลอรี่รวมทั้งเดือน</div>
+                        <div class="stat-value" id="monthlyCalories">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">kcal</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">จำนวนครั้งที่คำนวณ BMI</div>
+                        <div class="stat-value" id="monthlyBMICount">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">ครั้ง</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">อาหารโปรด</div>
+                        <div class="stat-value" id="monthlyFavorites">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">รายการ</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">วันที่ใช้งาน</div>
+                        <div class="stat-value" id="monthlyDays">0</div>
+                        <div style="color: #757575; font-size: 0.9rem;">วัน</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BMI Page -->
+    <div id="bmiPage" class="page">
+        <div class="container">
+            <h2 class="page-title">คำนวณค่า BMI</h2>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="bmi-card">
+                    <div class="form-group">
+                        <label>น้ำหนัก (กิโลกรัม)</label>
+                        <input type="number" id="weight" placeholder="ระบุน้ำหนักของคุณ">
+                    </div>
+
+                    <div class="form-group">
+                        <label>ส่วนสูง (เซนติเมตร)</label>
+                        <input type="number" id="height" placeholder="ระบุส่วนสูงของคุณ">
+                    </div>
+
+                    <button class="btn-primary" onclick="calculateBMI()">🧮 คำนวณ BMI</button>
+
+                    <div id="bmiResult" class="bmi-result hidden">
+                        <div class="bmi-value" id="bmiValue"></div>
+                        <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;" id="bmiCategory"></div>
+                        <p id="bmiAdvice" style="color: #616161; font-size: 1.1rem;"></p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: #4caf50; text-align: center; margin-bottom: 1rem;">📈 ประวัติ BMI ของคุณ</h3>
+                    <div id="bmiHistory"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Food Page -->
+    <div id="foodPage" class="page">
+        <div class="container">
+            <h2 class="page-title">🍽️ เมนูอาหารจากต่างดาว</h2>
+            
+            <!-- Calorie Category Filter -->
+            <div style="margin-bottom: 2rem;">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <h3 style="color: #4caf50; font-size: 1.5rem; margin-bottom: 0.5rem;">🔥 กรองตามแคลอรี่</h3>
+                    <p style="color: #757575; font-size: 0.9rem;">เลือกระดับแคลอรี่ที่เหมาะกับคุณ</p>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="filterFoodsByCalories('all')" id="filterAll" class="filter-btn active">
+                        🌟 ทั้งหมด
+                    </button>
+                    <button onclick="filterFoodsByCalories('low')" id="filterLow" class="filter-btn">
+                        🟢 ต่ำ (0-100)
+                    </button>
+                    <button onclick="filterFoodsByCalories('medium')" id="filterMedium" class="filter-btn">
+                        🟡 ปานกลาง (101-200)
+                    </button>
+                    <button onclick="filterFoodsByCalories('high')" id="filterHigh" class="filter-btn">
+                        🔴 สูง (201+)
+                    </button>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <span id="foodCount" style="color: #757575; font-size: 0.9rem;">แสดง 0 รายการ</span>
+                </div>
+            </div>
+            
+            <div class="food-grid" id="foodGrid"></div>
+        </div>
+    </div>
+
+    <!-- Exercise Page -->
+    <div id="exercisePage" class="page">
+        <div class="container">
+            <h2 class="page-title">💪 แนะนำออกกำลังกาย</h2>
+            
+            <!-- BMI Based Recommendations -->
+            <div class="dashboard-card" style="margin-bottom: 2rem;">
+                <h3 style="color: #4caf50; margin-bottom: 1rem; font-size: 1.8rem;">🎯 แผนออกกำลังกายตาม BMI ของคุณ</h3>
+                <div id="exerciseBMIInfo" style="text-align: center; padding: 2rem; background: rgba(76, 175, 80, 0.1); border-radius: 15px; margin-bottom: 2rem;">
+                    <p style="color: #757575; font-size: 1.1rem;">กรุณาคำนวณ BMI ของคุณก่อนเพื่อรับคำแนะนำที่เหมาะสม</p>
+                    <button class="btn-primary" onclick="showPage('bmi')" style="max-width: 300px; margin: 1rem auto 0;">ไปคำนวณ BMI</button>
+                </div>
+            </div>
+
+            <!-- Exercise Categories -->
+            <div class="dashboard-card" style="margin-bottom: 2rem;">
+                <h3 style="color: #ff9800; margin-bottom: 1.5rem; font-size: 1.8rem;">🏃 ประเภทการออกกำลังกาย</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <button onclick="showExerciseCategory('cardio')" style="background: linear-gradient(135deg, #e91e63, #f06292); color: white; padding: 1.5rem; border: none; border-radius: 20px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);">
+                        🏃 คาร์ดิโอ
+                    </button>
+                    <button onclick="showExerciseCategory('strength')" style="background: linear-gradient(135deg, #3f51b5, #5c6bc0); color: white; padding: 1.5rem; border: none; border-radius: 20px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(63, 81, 181, 0.3);">
+                        💪 เสริมสร้างกล้ามเนื้อ
+                    </button>
+                    <button onclick="showExerciseCategory('flexibility')" style="background: linear-gradient(135deg, #00bcd4, #4dd0e1); color: white; padding: 1.5rem; border: none; border-radius: 20px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(0, 188, 212, 0.3);">
+                        🧘 ยืดเหยียด
+                    </button>
+                    <button onclick="showExerciseCategory('balance')" style="background: linear-gradient(135deg, #9c27b0, #ba68c8); color: white; padding: 1.5rem; border: none; border-radius: 20px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);">
+                        ⚖️ ทรงตัว
+                    </button>
+                </div>
+            </div>
+
+            <!-- Exercise Grid -->
+            <div id="exerciseGrid" class="food-grid"></div>
+        </div>
+    </div>
+
+    <!-- Exercise Detail Modal -->
+    <div id="exerciseModal" class="modal" onclick="if(event.target === this) closeExerciseModal()">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 style="color: #4caf50;">รายละเอียดการออกกำลังกาย</h2>
+                <button onclick="closeExerciseModal()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #757575;">&times;</button>
+            </div>
+            <div id="exerciseModalBody"></div>
+        </div>
+    </div>
+
+    <!-- Food Modal -->
+    <div id="foodModal" class="modal" onclick="if(event.target === this) closeModal()">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 style="color: #4caf50;">รายละเอียดอาหาร</h2>
+                <button onclick="closeModal()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #757575;">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div id="userProfileModal" class="modal" onclick="if(event.target === this) closeUserProfileModal()">
+        <div class="modal-content">
+            <button onclick="closeUserProfileModal()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: #757575; z-index: 10;">&times;</button>
+            <div id="userProfileBody"></div>
+        </div>
+    </div>
+
+    <!-- User List Modal -->
+    <div id="userListModal" class="user-list-modal" onclick="if(event.target === this) closeUserList()">
+        <div class="modal-content" style="max-width: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 style="color: #4caf50;">👥 เลือกผู้ใช้งาน</h2>
+                <button onclick="closeUserList()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #757575;">&times;</button>
+            </div>
+            <div id="userListBody" style="display: grid; gap: 1rem;"></div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profilePage" class="page">
+        <div class="container">
+            <h2 class="page-title">👤 โปรไฟล์ของฉัน</h2>
+            <div style="max-width: 700px; margin: 0 auto;">
+                <div class="profile-card">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #4caf50, #66bb6a); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white;">👤</div>
+                        <h3 id="profileName" style="font-size: 1.8rem; margin-bottom: 0.5rem;">ผู้ใช้งาน</h3>
+                        <p id="profileEmail" style="color: #757575;">user@email.com</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ชื่อ</label>
+                        <input type="text" id="profileNameInput" value="ผู้ใช้งาน">
+                    </div>
+
+                    <div class="form-group">
+                        <label>อีเมล</label>
+                        <input type="email" id="profileEmailInput" value="user@email.com">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>อายุ</label>
+                            <input type="number" id="profileAge" value="30">
+                        </div>
+                        <div class="form-group">
+                            <label>น้ำหนัก (kg)</label>
+                            <input type="number" id="profileWeight" value="70">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ส่วนสูง (cm)</label>
+                        <input type="number" id="profileHeight" value="170">
+                    </div>
+
+                    <button class="btn-primary" onclick="saveProfile()">💾 บันทึกข้อมูล</button>
+
+                    <button onclick="clearAllData()" style="width: 100%; background: linear-gradient(135deg, #f44336, #e57373); color: white; padding: 1rem; border: none; border-radius: 15px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 1rem;">
+                        🗑️ ลบข้อมูลทั้งหมด
+                    </button>
+
+                    <div style="margin-top: 2rem; padding: 1rem; background: rgba(76, 175, 80, 0.1); border-radius: 15px; text-align: center;">
+                        <p style="color: #2e7d32; font-size: 0.9rem;">💾 ข้อมูลถูกบันทึกใน localStorage</p>
+                        <p style="color: #757575; font-size: 0.85rem; margin-top: 0.5rem;">คงอยู่ในเบราว์เซอร์นี้แม้ปิดเว็บไซต์</p>
+                    </div>
+
+                    <!-- Favorite Foods Section -->
+                    <div style="margin-top: 2rem;">
+                        <div style="text-align: center; margin-bottom: 1.5rem;">
+                            <h4 style="color: #4caf50; font-size: 1.5rem; margin-bottom: 0.5rem;">🍽️ อาหารโปรดของฉัน</h4>
+                            <p style="color: #757575; font-size: 0.9rem;">รายการอาหารที่คุณชื่นชอบ</p>
+                        </div>
+                        <div id="profileFavoriteFoods" style="display: grid; gap: 1rem;">
+                            <p style="text-align: center; color: #757575; padding: 1rem;">ยังไม่มีอาหารโปรด</p>
+                        </div>
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <button onclick="showPage('food')" style="background: linear-gradient(135deg, #4caf50, #66bb6a); color: white; padding: 0.8rem 2rem; border: none; border-radius: 15px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);">
+                                ➕ ไปเลือกอาหารโปรด
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="page">
+        <div style="max-width: 500px; margin: 5rem auto; padding: 0 2rem;">
+            <div class="login-card">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="font-size: 2.5rem; background: linear-gradient(135deg, #2e7d32, #4caf50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">🥗 NutriFriend</h2>
+                    <p style="color: #757575;">เข้าสู่ระบบเพื่อเริ่มดูแลสุขภาพ</p>
+                </div>
+
+                <div class="form-group">
+                    <label>อีเมล</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com">
+                    <div id="loginEmailError" class="error-message">กรุณาระบุอีเมลที่ถูกต้อง</div>
+                </div>
+
+                <div class="form-group">
+                    <label>รหัสผ่าน</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
+                    <div id="loginPasswordError" class="error-message">กรุณาระบุรหัสผ่าน</div>
+                </div>
+
+                <div id="loginError" class="error-message" style="margin-bottom: 1rem; text-align: center;">อีเมลหรือรหัสผ่านไม่ถูกต้อง</div>
+
+                <button class="btn-primary" onclick="login()">🔐 เข้าสู่ระบบ</button>
+                <button class="btn-secondary" onclick="showPage('register')">✨ สมัครสมาชิก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="registerPage" class="page">
+        <div style="max-width: 500px; margin: 5rem auto; padding: 0 2rem;">
+            <div class="login-card">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="font-size: 2.5rem; background: linear-gradient(135deg, #2e7d32, #4caf50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">✨ สมัครสมาชิก</h2>
+                    <p style="color: #757575;">เริ่มต้นดูแลสุขภาพกับ NutriFriend</p>
+                </div>
+
+                <div class="form-group">
+                    <label>ชื่อ-นามสกุล</label>
+                    <input type="text" id="registerName" placeholder="ระบุชื่อของคุณ">
+                    <div id="registerNameError" class="error-message">กรุณาระบุชื่อ</div>
+                </div>
+
+                <div class="form-group">
+                    <label>อีเมล</label>
+                    <input type="email" id="registerEmail" placeholder="your@email.com">
+                    <div id="registerEmailError" class="error-message">กรุณาระบุอีเมลที่ถูกต้อง</div>
+                </div>
+
+                <div class="form-group">
+                    <label>รหัสผ่าน</label>
+                    <input type="password" id="registerPassword" placeholder="อย่างน้อย 6 ตัวอักษร">
+                    <div id="registerPasswordError" class="error-message">รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร</div>
+                </div>
+
+                <div class="form-group">
+                    <label>ยืนยันรหัสผ่าน</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="ระบุรหัสผ่านอีกครั้ง">
+                    <div id="registerConfirmPasswordError" class="error-message">รหัสผ่านไม่ตรงกัน</div>
+                </div>
+
+                <div id="registerSuccess" class="success-message" style="margin-bottom: 1rem; text-align: center;">สมัครสมาชิกสำเร็จ! กำลังเข้าสู่ระบบ...</div>
+
+                <button class="btn-primary" onclick="register()">✨ สมัครสมาชิก</button>
+                <button class="btn-secondary" onclick="showPage('login')">🔐 มีบัญชีอยู่แล้ว? เข้าสู่ระบบ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===============================
+        // DATABASE SYSTEM (localStorage)
+        // ===============================
+        const DB = {
+            saveProfile(profileData) {
+                try {
+                    localStorage.setItem('nutrifriend_profile', JSON.stringify(profileData));
+                    return true;
+                } catch (error) {
+                    console.error('Error saving profile:', error);
+                    return false;
+                }
+            },
+
+            getProfile() {
+                try {
+                    const data = localStorage.getItem('nutrifriend_profile');
+                    return data ? JSON.parse(data) : null;
+                } catch (error) {
+                    return null;
+                }
+            },
+
+            saveUser(email, userData) {
+                try {
+                    const users = this.getAllUsers();
+                    users[email] = userData;
+                    localStorage.setItem('nutrifriend_users', JSON.stringify(users));
+                    return true;
+                } catch (error) {
+                    console.error('Error saving user:', error);
+                    return false;
+                }
+            },
+
+            getUser(email) {
+                try {
+                    const users = this.getAllUsers();
+                    return users[email] || null;
+                } catch (error) {
+                    return null;
+                }
+            },
+
+            getAllUsers() {
+                try {
+                    const data = localStorage.getItem('nutrifriend_users');
+                    return data ? JSON.parse(data) : {};
+                } catch (error) {
+                    return {};
+                }
+            },
+
+            saveBMIRecord(bmiData) {
+                try {
+                    const history = this.getBMIHistory();
+                    history.push(bmiData);
+                    localStorage.setItem('nutrifriend_bmi', JSON.stringify(history));
+                    return true;
+                } catch (error) {
+                    console.error('Error saving BMI:', error);
+                    return false;
+                }
+            },
+
+            getBMIHistory() {
+                try {
+                    const data = localStorage.getItem('nutrifriend_bmi');
+                    return data ? JSON.parse(data) : [];
+                } catch (error) {
+                    return [];
+                }
+            },
+
+            saveFavoriteFood(foodName) {
+                try {
+                    const favorites = this.getFavoriteFoods();
+                    if (!favorites.includes(foodName)) {
+                        favorites.push(foodName);
+                        localStorage.setItem('nutrifriend_favorites', JSON.stringify(favorites));
+                    }
+                    return true;
+                } catch (error) {
+                    return false;
+                }
+            },
+
+            removeFavoriteFood(foodName) {
+                try {
+                    const favorites = this.getFavoriteFoods();
+                    const filtered = favorites.filter(f => f !== foodName);
+                    localStorage.setItem('nutrifriend_favorites', JSON.stringify(filtered));
+                    return true;
+                } catch (error) {
+                    return false;
+                }
+            },
+
+            getFavoriteFoods() {
+                try {
+                    const data = localStorage.getItem('nutrifriend_favorites');
+                    return data ? JSON.parse(data) : [];
+                } catch (error) {
+                    return [];
+                }
+            },
+
+            saveDailyConsumption(consumptionData) {
+                try {
+                    const today = new Date().toDateString();
+                    const data = this.getDailyConsumption();
+                    data[today] = consumptionData;
+                    localStorage.setItem('nutrifriend_daily', JSON.stringify(data));
+                    return true;
+                } catch (error) {
+                    return false;
+                }
+            },
+
+            getDailyConsumption() {
+                try {
+                    const data = localStorage.getItem('nutrifriend_daily');
+                    return data ? JSON.parse(data) : {};
+                } catch (error) {
+                    return {};
+                }
+            },
+
+            clearAllData() {
+                try {
+                    localStorage.removeItem('nutrifriend_profile');
+                    localStorage.removeItem('nutrifriend_bmi');
+                    localStorage.removeItem('nutrifriend_favorites');
+                    localStorage.removeItem('nutrifriend_daily');
+                    return true;
+                } catch (error) {
+                    return false;
+                }
+            }
+        };
+
+        // Data - Foods with more items
+        const foods = [
+            // Low Calorie (ต่ำ: 0-100 kcal)
+            {name: "เจลลี่เรืองแสงซีตา", icon: "✨", origin: "ดาวเคราะห์ Luminara", calories: 85, protein: 5, carbs: 18, fat: 0.5},
+            {name: "สาหร่ายคริสตัลไทเทเนีย", icon: "💎", origin: "ดาวเสาร์ Moon Titan", calories: 45, protein: 12, carbs: 5, fat: 0.8},
+            {name: "น้ำหมักไฮโดรเจนซอร์บ", icon: "💧", origin: "ดาวเคราะห์ Aquaria Prime", calories: 15, protein: 0, carbs: 4, fat: 0},
+            {name: "เห็ดเรืองรังสีเซเรเนีย", icon: "🍄", origin: "ดาวเคราะห์ Mycelia", calories: 95, protein: 18, carbs: 12, fat: 2},
+            {name: "สลัดคอสมิก", icon: "🥗", origin: "สถานีอวกาศ Verdant", calories: 65, protein: 4, carbs: 12, fat: 1.5},
+            {name: "น้ำผลไม้พลังงานแสง", icon: "🧃", origin: "ดาวเคราะห์ Solara", calories: 55, protein: 1, carbs: 14, fat: 0.2},
+            {name: "เต้าหู้ควอนตัม", icon: "🧊", origin: "มิติที่ 5", calories: 78, protein: 9, carbs: 6, fat: 3},
+            {name: "ผักกาดดาวนีออน", icon: "🥬", origin: "ดาวเคราะห์ Chloros", calories: 32, protein: 3, carbs: 6, fat: 0.3},
+            {name: "แอปเปิ้ลโฮโลแกรม", icon: "🍎", origin: "ฟาร์มอวกาศ Beta-7", calories: 72, protein: 0.5, carbs: 19, fat: 0.3},
+            {name: "น้ำซุปดาวตก", icon: "☄️", origin: "สถานีวิจัย Meteor", calories: 48, protein: 4, carbs: 8, fat: 0.8},
+            
+            // Medium Calorie (ปานกลาง: 101-200 kcal)
+            {name: "ผลไม้ลอยน้ำแอสทรา", icon: "🍇", origin: "ดาวพฤหัสบดี Moon Io", calories: 120, protein: 3, carbs: 28, fat: 1},
+            {name: "ข้าวโพดพลาสม่า", icon: "🌽", origin: "ดาวอังคาร ฟาร์มโดม 3", calories: 150, protein: 8, carbs: 32, fat: 2},
+            {name: "เนื้อวุ้นควอนตัม", icon: "🌀", origin: "มิติที่ 7", calories: 200, protein: 25, carbs: 8, fat: 10},
+            {name: "ข้าวอวกาศไฮเปอร์", icon: "🍚", origin: "ดาวเคราะห์ Granos", calories: 165, protein: 5, carbs: 36, fat: 1.5},
+            {name: "พาสต้าดาวเทียม", icon: "🍝", origin: "สถานีอวกาศ Italia-9", calories: 185, protein: 7, carbs: 38, fat: 2},
+            {name: "แซนด์วิชไอออนิก", icon: "🥪", origin: "ฟาร์มโดม Terra-12", calories: 178, protein: 12, carbs: 24, fat: 5},
+            {name: "ซูชิเนบิวลา", icon: "🍣", origin: "ดาวเคราะห์ Oceanus", calories: 142, protein: 10, carbs: 20, fat: 3},
+            {name: "โยเกิร์ตสเปกตรัม", icon: "🥛", origin: "ดาวเคราะห์ Lactos", calories: 135, protein: 8, carbs: 18, fat: 4},
+            {name: "กล้วยควอซาร์", icon: "🍌", origin: "ดาวเคราะห์ Tropicos", calories: 105, protein: 1.5, carbs: 27, fat: 0.4},
+            {name: "ซุปเห็ดเงาดาว", icon: "🍲", origin: "มิติที่ 4", calories: 118, protein: 6, carbs: 15, fat: 4.5},
+            {name: "ปลาอวกาศย่าง", icon: "🐟", origin: "ทะเลดาว Aquatica", calories: 156, protein: 22, carbs: 3, fat: 6},
+            {name: "บาร์พลังงานโฟตอน", icon: "⚡", origin: "โรงงาน Energy-X", calories: 192, protein: 9, carbs: 28, fat: 6},
+            
+            // High Calorie (สูง: 201+ kcal)
+            {name: "ไข่ดาวฟินิกซ์", icon: "🥚", origin: "ดาวเคราะห์ Phoenix Prime", calories: 220, protein: 20, carbs: 6, fat: 15},
+            {name: "สเต็กดาวนิวตรอน", icon: "🥩", origin: "ฟาร์มปศุสัตว์ Stellar", calories: 285, protein: 28, carbs: 5, fat: 18},
+            {name: "พิซซ่าแกแล็กซี่", icon: "🍕", origin: "สถานีอวกาศ Italiano-5", calories: 312, protein: 14, carbs: 38, fat: 12},
+            {name: "เบอร์เกอร์โนวา", icon: "🍔", origin: "ร้านอาหาร Cosmic Bite", calories: 425, protein: 25, carbs: 42, fat: 18},
+            {name: "เค้กบล็อกโฮล", icon: "🍰", origin: "ร้านเบเกอรี่ Dark Matter", calories: 380, protein: 6, carbs: 58, fat: 15},
+            {name: "กะหรี่โพลาริส", icon: "🍛", origin: "ดาวเคราะห์ Spiceon", calories: 265, protein: 12, carbs: 35, fat: 10},
+            {name: "ราเมนซูเปอร์โนวา", icon: "🍜", origin: "สถานีอวกาศ Ramen-X", calories: 348, protein: 16, carbs: 45, fat: 12},
+            {name: "ไอศกรีมคอสมิก", icon: "🍦", origin: "โรงงาน Frozen Galaxy", calories: 235, protein: 5, carbs: 32, fat: 11},
+            {name: "นักเก็ตดาวเคราะห์", icon: "🍗", origin: "ฟาร์มไก่ Orbit-7", calories: 298, protein: 18, carbs: 22, fat: 16},
+            {name: "ทาโก้พัลซาร์", icon: "🌮", origin: "ร้านอาหาร Taco Nebula", calories: 256, protein: 14, carbs: 28, fat: 11}
+        ];
+
+        const exercises = [
+            // Cardio
+            {name: "วิ่งจ๊อกกิ้ง", icon: "🏃", category: "cardio", difficulty: "ง่าย", duration: "30 นาที", calories: 300, description: "วิ่งเหยาะๆ ในระดับความเร็วปานกลาง เหมาะสำหรับผู้เริ่มต้น", steps: ["อบอุ่นร่างกาย 5 นาที", "วิ่งเหยาะในจังหวะสม่ำเสมอ 20 นาที", "คลายกล้ามเนื้อ 5 นาที"], bmiRecommend: ["น้ำหนักเกิน", "สมส่วน"]},
+            {name: "ปั่นจักรยาน", icon: "🚴", category: "cardio", difficulty: "ง่าย", duration: "45 นาที", calories: 400, description: "ปั่นจักรยานกลางแจ้งหรือใช้จักรยานออกกำลังกาย", steps: ["ปรับความสูงอานให้เหมาะสม", "ปั่นด้วยความเร็วปานกลาง", "เพิ่มความเร็วช่วงสั้นๆ สลับกัน"], bmiRecommend: ["น้ำหนักเกิน", "อ้วน", "สมส่วน"]},
+            {name: "กระโดดเชือก", icon: "🪢", category: "cardio", difficulty: "ปานกลาง", duration: "20 นาที", calories: 250, description: "กระโดดเชือกเป็นจังหวะ เผาผลาญแคลอรี่สูง", steps: ["กระโดด 1 นาที พัก 30 วินาที", "ทำซ้ำ 10 รอบ", "คลายกล้ามเนื้อขา"], bmiRecommend: ["สมส่วน", "น้ำหนักน้อย"]},
+            {name: "ว่ายน้ำ", icon: "🏊", category: "cardio", difficulty: "ปานกลาง", duration: "40 นาที", calories: 350, description: "ว่ายน้ำท่าอิสระหรือท่าอื่นๆ เบาสำหรับข้อต่อ", steps: ["อบอุ่นร่างกาย 5 นาที", "ว่ายน้ำอย่างต่อเนื่อง 30 นาที", "พักผ่อนและยืดเหยียด"], bmiRecommend: ["อ้วน", "อ้วนมาก", "น้ำหนักเกิน"]},
+            
+            // Strength
+            {name: "วิดพื้น (Push-up)", icon: "💪", category: "strength", difficulty: "ปานกลาง", duration: "15 นาที", calories: 100, description: "เสริมสร้างกล้ามเนื้อหน้าอก แขน และไหล่", steps: ["วางมือกว้างเท่าไหล่", "ลำตัวตรง ไม่โก่งหรือยุบ", "ทำ 3 เซ็ต เซ็ตละ 10-15 ครั้ง"], bmiRecommend: ["สมส่วน", "น้ำหนักน้อย"]},
+            {name: "สควอท (Squat)", icon: "🦵", category: "strength", difficulty: "ง่าย", duration: "15 นาที", calories: 120, description: "เสริมสร้างกล้ามเนื้อขาและสะโพก", steps: ["ยืนเท้าห่างเท่าไหล่", "นั่งลงเหมือนนั่งเก้าอี้", "ทำ 3 เซ็ต เซ็ตละ 15 ครั้ง"], bmiRecommend: ["สมส่วน", "น้ำหนักเกิน", "น้ำหนักน้อย"]},
+            {name: "ยกน้ำหนัก", icon: "🏋️", category: "strength", difficulty: "ยาก", duration: "45 นาที", calories: 200, description: "ยกดัมเบลล์หรือบาร์เบลล์ เพิ่มมวลกล้ามเนื้อ", steps: ["เริ่มด้วยน้ำหนักเบา", "โฟกัสที่ท่าทางที่ถูกต้อง", "เพิ่มน้ำหนักค่อยเป็นค่อยไป"], bmiRecommend: ["น้ำหนักน้อย", "สมส่วน"]},
+            {name: "แพลงค์ (Plank)", icon: "🧱", category: "strength", difficulty: "ปานกลาง", duration: "10 นาที", calories: 80, description: "เสริมสร้างกล้ามเนื้อแกนกลางร่างกาย", steps: ["ท่าควำ ค้ำด้วยข้อศอก", "ลำตัวตรงเป็นเส้นตรง", "กลั้น 30-60 วินาที ทำ 3 เซ็ต"], bmiRecommend: ["สมส่วน", "น้ำหนักเกิน"]},
+            
+            // Flexibility
+            {name: "โยคะ", icon: "🧘", category: "flexibility", difficulty: "ง่าย", duration: "60 นาที", calories: 180, description: "เพิ่มความยืดหยุ่นและผ่อนคลายจิตใจ", steps: ["ท่า Sun Salutation 5-10 ครั้ง", "ท่ายืดกล้ามเนื้อต่างๆ", "ท่านั่งสมาธิ 5 นาที"], bmiRecommend: ["สมส่วน", "น้ำหนักเกิน", "อ้วน"]},
+            {name: "ยืดเหยียดกล้ามเนื้อ", icon: "🤸", category: "flexibility", difficulty: "ง่าย", duration: "20 นาที", calories: 60, description: "ยืดกล้ามเนื้อทั่วร่างกาย ลดการบาดเจ็บ", steps: ["ยืดแขนและไหล่ 5 นาที", "ยืดขาและสะโพก 5 นาที", "ยืดหลังและลำตัว 5 นาที"], bmiRecommend: ["สมส่วน", "น้ำหนักเกิน", "อ้วน", "น้ำหนักน้อย"]},
+            {name: "พิลาทิส", icon: "🤸‍♀️", category: "flexibility", difficulty: "ปานกลาง", duration: "45 นาที", calories: 150, description: "เสริมสร้างความแข็งแรงและความยืดหยุ่น", steps: ["ออกกำลังกล้ามเนื้อแกนกลาง", "ควบคุมลมหายใจ", "เคลื่อนไหวอย่างนุ่มนวล"], bmiRecommend: ["สมส่วน", "น้ำหนักเกิน"]},
+            
+            // Balance
+            {name: "ไทเก็ต", icon: "🥋", category: "balance", difficulty: "ง่าย", duration: "40 นาที", calories: 130, description: "ศิลปะการเคลื่อนไหวแบบจีน เพิ่มสมาธิและทรงตัว", steps: ["ท่าพื้นฐาน 8 ท่า", "เคลื่อนไหวช้าและต่อเนื่อง", "ควบคุมลมหายใจ"], bmiRecommend: ["สมส่วน", "น้ำหนักเกิน", "อ้วน"]},
+            {name: "ยืนขาเดียว", icon: "🦩", category: "balance", difficulty: "ง่าย", duration: "10 นาที", calories: 40, description: "ฝึกการทรงตัวเพื่อป้องกันการล้ม", steps: ["ยืนขาเดียว 30 วินาที", "สลับขา", "ทำ 5 รอบต่อขา"], bmiRecommend: ["สมส่วน", "น้ำหนักน้อย"]},
+            {name: "บาลานซ์บอร์ด", icon: "⚖️", category: "balance", difficulty: "ปานกลาง", duration: "20 นาที", calories: 90, description: "ใช้อุปกรณ์ฝึกการทรงตัว", steps: ["ยืนบนบอร์ดทรงตัว", "พยายามรักษาสมดุล", "ทำท่าต่างๆ บนบอร์ด"], bmiRecommend: ["สมส่วน"]}
+        ];
+
+        let currentExerciseCategory = 'all';
+        let currentFoodCalorieFilter = 'all';
+        let isLoggedIn = false;
+        let currentUser = null;
+        let favoriteFoods = [];
+        let currentDashboardUser = null;
+        let myDashboardUser = null;
+
+        // ข้อมูลผู้ใช้ทั้งหมด (ตัวอย่าง)
+        const sampleUsers = {
+            'Cristiano Ronaldo': {
+                name: 'Cristiano Ronaldo',
+                icon: '⚽',
+                age: 39,
+                weight: 84,
+                height: 187,
+                bmi: 24.0,
+                memberSince: 'มกราคม 2020',
+                totalWorkouts: 1250,
+                favoriteFoods: ['เจลลี่เรืองแสงซีตา', 'เนื้อวุ้นควอนตัม', 'ไข่ดาวฟินิกซ์'],
+                achievements: ['🏆 นักกีฬาตัวอย่าง', '💪 ออกกำลังกาย 1000+ ครั้ง', '🥗 โภชนาการสมดุล', '⭐ สมาชิกระดับเพชร'],
+                dailyCalories: 2850,
+                dailyProtein: 185,
+                dailyCarbs: 320,
+                dailyFat: 75,
+                weeklyCalories: 2800,
+                weeklyProtein: 180,
+                weeklyMeals: 42,
+                monthlyCalories: 84000,
+                monthlyBMICount: 12,
+                monthlyFavorites: 3,
+                monthlyDays: 30,
+                recentBMI: [
+                    {date: '20/11/2567', bmi: 24.0, category: 'สมส่วน'},
+                    {date: '15/11/2567', bmi: 24.2, category: 'สมส่วน'},
+                    {date: '10/11/2567', bmi: 24.1, category: 'สมส่วน'}
+                ]
+            },
+            'Lionel Messi': {
+                name: 'Lionel Messi',
+                icon: '🐐',
+                age: 37,
+                weight: 72,
+                height: 170,
+                bmi: 24.9,
+                memberSince: 'มีนาคม 2019',
+                totalWorkouts: 1180,
+                favoriteFoods: ['ผลไม้ลอยน้ำแอสทรา', 'สาหร่ายคริสตัลไทเทเนีย'],
+                achievements: ['🐐 GOAT', '⚽ ทักษะระดับตำนาน', '🏆 แชมป์ระดับโลก', '💎 สมาชิก VIP'],
+                dailyCalories: 2650,
+                dailyProtein: 165,
+                dailyCarbs: 295,
+                dailyFat: 68,
+                weeklyCalories: 2600,
+                weeklyProtein: 160,
+                weeklyMeals: 38,
+                monthlyCalories: 78000,
+                monthlyBMICount: 10,
+                monthlyFavorites: 2,
+                monthlyDays: 28,
+                recentBMI: [
+                    {date: '20/11/2567', bmi: 24.9, category: 'สมส่วน'},
+                    {date: '14/11/2567', bmi: 24.8, category: 'สมส่วน'}
+                ]
+            },
+            'Neymar Jr': {
+                name: 'Neymar Jr',
+                icon: '⭐',
+                age: 32,
+                weight: 68,
+                height: 175,
+                bmi: 22.2,
+                memberSince: 'กรกฎาคม 2021',
+                totalWorkouts: 890,
+                favoriteFoods: ['เจลลี่เรืองแสงซีตา', 'น้ำหมักไฮโดรเจนซอร์บ', 'ข้าวโพดพลาสม่า'],
+                achievements: ['⭐ ดาวรุ่ง', '🎨 สไตล์เฉพาะตัว', '💪 ความแข็งแกร่ง'],
+                dailyCalories: 2450,
+                dailyProtein: 150,
+                dailyCarbs: 275,
+                dailyFat: 62,
+                weeklyCalories: 2400,
+                weeklyProtein: 145,
+                weeklyMeals: 35,
+                monthlyCalories: 72000,
+                monthlyBMICount: 8,
+                monthlyFavorites: 3,
+                monthlyDays: 25,
+                recentBMI: [
+                    {date: '18/11/2567', bmi: 22.2, category: 'สมส่วน'},
+                    {date: '11/11/2567', bmi: 22.0, category: 'สมส่วน'}
+                ]
+            }
+        };
+
+        // Initialize
+        function initApp() {
+            currentUser = DB.getProfile();
+            if (currentUser && currentUser.email) {
+                isLoggedIn = true;
+                myDashboardUser = currentUser.name || currentUser.email;
+                currentDashboardUser = myDashboardUser;
+                
+                document.getElementById('authBtn').textContent = 'ออกจากระบบ';
+                document.getElementById('authBtn').className = 'logout-btn';
+                
+                if (currentUser.name) {
+                    document.getElementById('profileName').textContent = currentUser.name;
+                    document.getElementById('profileNameInput').value = currentUser.name;
+                }
+                if (currentUser.email) {
+                    document.getElementById('profileEmail').textContent = currentUser.email;
+                    document.getElementById('profileEmailInput').value = currentUser.email;
+                }
+                if (currentUser.age) document.getElementById('profileAge').value = currentUser.age;
+                if (currentUser.weight) document.getElementById('profileWeight').value = currentUser.weight;
+                if (currentUser.height) document.getElementById('profileHeight').value = currentUser.height;
+            }
+
+            favoriteFoods = DB.getFavoriteFoods();
+            displayFoods();
+            loadBMIHistory();
+        }
+
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageName + 'Page').classList.add('active');
+            
+            if (pageName === 'food') {
+                favoriteFoods = DB.getFavoriteFoods();
+                displayFoods();
+            } else if (pageName === 'bmi') {
+                loadBMIHistory();
+            } else if (pageName === 'dashboard') {
+                updateDashboardUserName();
+                loadDashboardData();
+                updateBackButton();
+            } else if (pageName === 'exercise') {
+                loadExercisePage();
+            } else if (pageName === 'profile') {
+                loadProfileFavorites();
+            }
+        }
+
+        // ===============================
+        // FOOD FILTER FUNCTIONS
+        // ===============================
+        
+        function filterFoodsByCalories(category) {
+            currentFoodCalorieFilter = category;
+            
+            // Update button styles
+            const buttons = ['filterAll', 'filterLow', 'filterMedium', 'filterHigh'];
+            buttons.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                btn.classList.remove('active');
+            });
+            
+            const activeBtn = document.getElementById('filter' + category.charAt(0).toUpperCase() + category.slice(1));
+            activeBtn.classList.add('active');
+            
+            displayFoods();
+        }
+
+        function getCalorieCategory(calories) {
+            if (calories <= 100) return 'low';
+            if (calories <= 200) return 'medium';
+            return 'high';
+        }
+
+        function getCalorieBadgeColor(calories) {
+            if (calories <= 100) return '#4caf50';
+            if (calories <= 200) return '#ff9800';
+            return '#f44336';
+        }
+
+        function displayFoods() {
+            const foodGrid = document.getElementById('foodGrid');
+            let filteredFoods = foods;
+            
+            // Filter by calorie category
+            if (currentFoodCalorieFilter !== 'all') {
+                filteredFoods = foods.filter(food => getCalorieCategory(food.calories) === currentFoodCalorieFilter);
+            }
+            
+            // Update food count
+            document.getElementById('foodCount').textContent = `แสดง ${filteredFoods.length} รายการ`;
+            
+            foodGrid.innerHTML = '';
+            
+            filteredFoods.forEach(food => {
+                const isFavorite = favoriteFoods.includes(food.name);
+                const calorieColor = getCalorieBadgeColor(food.calories);
+                const calorieCategory = getCalorieCategory(food.calories);
+                const calorieCategoryText = calorieCategory === 'low' ? 'ต่ำ' : calorieCategory === 'medium' ? 'ปานกลาง' : 'สูง';
+                
+                const card = document.createElement('div');
+                card.className = 'food-card';
+                
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <div style="font-size: 3rem;">${food.icon}</div>
+                        <button onclick="event.stopPropagation(); toggleFavorite('${food.name}')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; transition: transform 0.2s;">
+                            ${isFavorite ? '❤️' : '🤍'}
+                        </button>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="display: inline-block; background: linear-gradient(135deg, #9c27b0, #e91e63); color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem; margin-bottom: 0.5rem;">
+                            🌌 จากต่างดาว
+                        </div>
+                        <div style="display: inline-block; background: ${calorieColor}; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem; margin-bottom: 1rem; margin-left: 0.5rem;">
+                            🔥 แคลอรี่${calorieCategoryText}
+                        </div>
+                    </div>
+                    <div style="font-size: 1.3rem; font-weight: bold; color: #2e7d32; margin-bottom: 0.5rem; text-align: center;">${food.name}</div>
+                    <div style="text-align: center; color: #757575; font-size: 0.9rem; margin-bottom: 1rem;">🌍 ${food.origin}</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem;">
+                        <div style="background: rgba(76, 175, 80, 0.1); padding: 0.7rem; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 1.2rem; font-weight: bold; color: #4caf50;">${food.calories}</div>
+                            <div style="font-size: 0.75rem; color: #757575;">แคลอรี่</div>
+                        </div>
+                        <div style="background: rgba(76, 175, 80, 0.1); padding: 0.7rem; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 1.2rem; font-weight: bold; color: #4caf50;">${food.protein}g</div>
+                            <div style="font-size: 0.75rem; color: #757575;">โปรตีน</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 1rem; color: #9c27b0; font-weight: bold; font-size: 0.9rem; cursor: pointer;" onclick="showFoodDetail('${food.name}')">
+                        คลิกเพื่อดูรายละเอียด →
+                    </div>
+                `;
+                
+                foodGrid.appendChild(card);
+            });
+        }
+
+        function toggleFavorite(foodName) {
+            const isFavorite = favoriteFoods.includes(foodName);
+            
+            if (isFavorite) {
+                DB.removeFavoriteFood(foodName);
+                favoriteFoods = favoriteFoods.filter(f => f !== foodName);
+            } else {
+                DB.saveFavoriteFood(foodName);
+                favoriteFoods.push(foodName);
+            }
+            
+            displayFoods();
+            
+            // Update profile page if it's currently open
+            const profilePage = document.getElementById('profilePage');
+            if (profilePage && profilePage.classList.contains('active')) {
+                loadProfileFavorites();
+            }
+        }
+
+        function showFoodDetail(foodName) {
+            const food = foods.find(f => f.name === foodName);
+            if (!food) return;
+
+            const modal = document.getElementById('foodModal');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 5rem; margin-bottom: 1rem;">${food.icon}</div>
+                    <h3 style="font-size: 2.5rem; color: #4caf50; margin-bottom: 0.5rem;">${food.name}</h3>
+                    <p style="font-size: 1.1rem; color: #757575; margin-bottom: 1rem;">🌍 แหล่งที่มา: ${food.origin}</p>
+                    <span style="display: inline-block; background: linear-gradient(135deg, #9c27b0, #e91e63); color: white; padding: 0.5rem 1.5rem; border-radius: 15px; font-size: 1rem;">🌌 อาหารจากต่างดาว</span>
+                </div>
+                
+                <h4 style="text-align: center; color: #4caf50; font-size: 1.8rem; margin-bottom: 1rem;">📊 ข้อมูลโภชนาการ</h4>
+                <p style="text-align: center; color: #757575; margin-bottom: 2rem;">ต่อหนึ่งหน่วยบริโภค</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 2rem 0;">
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1.5rem; border-radius: 15px; text-align: center; border: 2px solid rgba(76, 175, 80, 0.3);">
+                        <div style="font-size: 2rem; font-weight: bold; color: #4caf50;">${food.calories}</div>
+                        <div style="color: #757575; font-weight: 600;">แคลอรี่</div>
+                    </div>
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1.5rem; border-radius: 15px; text-align: center; border: 2px solid rgba(76, 175, 80, 0.3);">
+                        <div style="font-size: 2rem; font-weight: bold; color: #4caf50;">${food.protein}g</div>
+                        <div style="color: #757575; font-weight: 600;">โปรตีน</div>
+                    </div>
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1.5rem; border-radius: 15px; text-align: center; border: 2px solid rgba(76, 175, 80, 0.3);">
+                        <div style="font-size: 2rem; font-weight: bold; color: #4caf50;">${food.carbs}g</div>
+                        <div style="color: #757575; font-weight: 600;">คาร์โบไฮเดรต</div>
+                    </div>
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1.5rem; border-radius: 15px; text-align: center; border: 2px solid rgba(76, 175, 80, 0.3);">
+                        <div style="font-size: 2rem; font-weight: bold; color: #4caf50;">${food.fat}g</div>
+                        <div style="color: #757575; font-weight: 600;">ไขมัน</div>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" onclick="closeModal()" style="margin-top: 2rem;">ปิด</button>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('foodModal').classList.remove('active');
+        }
+
+        // ===============================
+        // CONTINUE WITH REST OF CODE
+        // ===============================
+        
+        function updateDashboardUserName() {
+            const nameElement = document.getElementById('dashboardUserName');
+            nameElement.textContent = currentDashboardUser || 'Guest';
+        }
+
+        function updateBackButton() {
+            const backBtn = document.getElementById('myDashboardBtn');
+            if (myDashboardUser && currentDashboardUser !== myDashboardUser) {
+                backBtn.style.display = 'inline-block';
+            } else {
+                backBtn.style.display = 'none';
+            }
+        }
+
+        function returnToMyDashboard() {
+            currentDashboardUser = myDashboardUser;
+            updateDashboardUserName();
+            loadDashboardData();
+            updateBackButton();
+        }
+
+        function showCurrentUserProfile() {
+            showUserProfile(currentDashboardUser);
+        }
+
+        function showUserList() {
+            const modal = document.getElementById('userListModal');
+            const listBody = document.getElementById('userListBody');
+            
+            listBody.innerHTML = Object.keys(sampleUsers).map(userName => {
+                const user = sampleUsers[userName];
+                return `
+                    <div class="user-list-card" onclick="switchDashboardUser('${userName}')">
+                        <div style="font-size: 3rem;">${user.icon}</div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 1.3rem; font-weight: bold; color: #2e7d32;">${user.name}</div>
+                            <div style="color: #757575; font-size: 0.9rem;">BMI: ${user.bmi} | สมาชิกตั้งแต่ ${user.memberSince}</div>
+                        </div>
+                        <div style="color: #4caf50; font-size: 1.2rem;">→</div>
+                    </div>
+                `;
+            }).join('');
+            
+            modal.classList.add('active');
+        }
+
+        function closeUserList() {
+            document.getElementById('userListModal').classList.remove('active');
+        }
+
+        function switchDashboardUser(userName) {
+            currentDashboardUser = userName;
+            closeUserList();
+            updateDashboardUserName();
+            loadDashboardData();
+            updateBackButton();
+        }
+
+        function loadDashboardData() {
+            let userData;
+            
+            if (currentDashboardUser && sampleUsers[currentDashboardUser]) {
+                userData = sampleUsers[currentDashboardUser];
+            } else if (currentUser) {
+                const bmiHistory = DB.getBMIHistory();
+                const favorites = DB.getFavoriteFoods();
+                
+                userData = {
+                    dailyCalories: 0,
+                    dailyProtein: 0,
+                    dailyCarbs: 0,
+                    dailyFat: 0,
+                    weeklyCalories: 0,
+                    weeklyMeals: 0,
+                    weeklyBMI: bmiHistory.length > 0 ? bmiHistory[bmiHistory.length - 1].bmi : '-',
+                    weight: currentUser.weight || '-',
+                    monthlyCalories: 0,
+                    monthlyBMICount: bmiHistory.length,
+                    favoriteFoods: favorites,
+                    monthlyDays: 0
+                };
+            } else {
+                userData = {
+                    dailyCalories: 0,
+                    dailyProtein: 0,
+                    dailyCarbs: 0,
+                    dailyFat: 0,
+                    weeklyCalories: 0,
+                    weeklyMeals: 0,
+                    weeklyBMI: '-',
+                    weight: '-',
+                    monthlyCalories: 0,
+                    monthlyBMICount: 0,
+                    favoriteFoods: [],
+                    monthlyDays: 0
+                };
+            }
+
+            document.getElementById('dailyCalories').textContent = userData.dailyCalories || 0;
+            document.getElementById('dailyProtein').textContent = userData.dailyProtein || 0;
+            document.getElementById('dailyCarbs').textContent = userData.dailyCarbs || 0;
+            document.getElementById('dailyFat').textContent = userData.dailyFat || 0;
+
+            document.getElementById('weeklyCalories').textContent = userData.weeklyCalories || 0;
+            document.getElementById('weeklyMeals').textContent = userData.weeklyMeals || 0;
+            document.getElementById('weeklyBMI').textContent = userData.weeklyBMI || userData.bmi || '-';
+            document.getElementById('weeklyWeight').textContent = userData.weight || '-';
+
+            document.getElementById('monthlyCalories').textContent = userData.monthlyCalories || 0;
+            document.getElementById('monthlyBMICount').textContent = userData.monthlyBMICount || 0;
+            document.getElementById('monthlyFavorites').textContent = userData.favoriteFoods ? userData.favoriteFoods.length : 0;
+            document.getElementById('monthlyDays').textContent = userData.monthlyDays || 0;
+        }
+
+        function handleAuth() {
+            if (isLoggedIn) {
+                logout();
+            } else {
+                showPage('login');
+            }
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function login() {
+            document.getElementById('loginEmailError').style.display = 'none';
+            document.getElementById('loginPasswordError').style.display = 'none';
+            document.getElementById('loginError').style.display = 'none';
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            let hasError = false;
+
+            if (!email || !validateEmail(email)) {
+                document.getElementById('loginEmailError').style.display = 'block';
+                hasError = true;
+            }
+
+            if (!password) {
+                document.getElementById('loginPasswordError').style.display = 'block';
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            const user = DB.getUser(email);
+            
+            if (!user || user.password !== password) {
+                document.getElementById('loginError').style.display = 'block';
+                return;
+            }
+
+            const profileData = {
+                email: email,
+                name: user.name,
+                age: user.age,
+                weight: user.weight,
+                height: user.height,
+                loginDate: new Date().toISOString()
+            };
+            
+            DB.saveProfile(profileData);
+            isLoggedIn = true;
+            currentUser = profileData;
+            myDashboardUser = user.name;
+            currentDashboardUser = myDashboardUser;
+            
+            document.getElementById('authBtn').textContent = 'ออกจากระบบ';
+            document.getElementById('authBtn').className = 'logout-btn';
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileNameInput').value = user.name;
+            document.getElementById('profileEmail').textContent = email;
+            document.getElementById('profileEmailInput').value = email;
+            
+            if (user.age) document.getElementById('profileAge').value = user.age;
+            if (user.weight) document.getElementById('profileWeight').value = user.weight;
+            if (user.height) document.getElementById('profileHeight').value = user.height;
+            
+            alert('✅ เข้าสู่ระบบสำเร็จ!');
+            showPage('home');
+        }
+
+        function register() {
+            document.getElementById('registerNameError').style.display = 'none';
+            document.getElementById('registerEmailError').style.display = 'none';
+            document.getElementById('registerPasswordError').style.display = 'none';
+            document.getElementById('registerConfirmPasswordError').style.display = 'none';
+            document.getElementById('registerSuccess').style.display = 'none';
+
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            let hasError = false;
+
+            if (!name) {
+                document.getElementById('registerNameError').style.display = 'block';
+                hasError = true;
+            }
+
+            if (!email || !validateEmail(email)) {
+                document.getElementById('registerEmailError').style.display = 'block';
+                hasError = true;
+            }
+
+            if (!password || password.length < 6) {
+                document.getElementById('registerPasswordError').style.display = 'block';
+                hasError = true;
+            }
+
+            if (password !== confirmPassword) {
+                document.getElementById('registerConfirmPasswordError').style.display = 'block';
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            if (DB.getUser(email)) {
+                document.getElementById('registerEmailError').textContent = 'อีเมลนี้ถูกใช้งานแล้ว';
+                document.getElementById('registerEmailError').style.display = 'block';
+                return;
+            }
+
+            const userData = {
+                name: name,
+                email: email,
+                password: password,
+                age: null,
+                weight: null,
+                height: null,
+                createdAt: new Date().toISOString()
+            };
+
+            DB.saveUser(email, userData);
+            document.getElementById('registerSuccess').style.display = 'block';
+
+            setTimeout(() => {
+                const profileData = {
+                    email: email,
+                    name: name,
+                    age: null,
+                    weight: null,
+                    height: null,
+                    loginDate: new Date().toISOString()
+                };
+                
+                DB.saveProfile(profileData);
+                isLoggedIn = true;
+                currentUser = profileData;
+                myDashboardUser = name;
+                currentDashboardUser = myDashboardUser;
+                
+                document.getElementById('authBtn').textContent = 'ออกจากระบบ';
+                document.getElementById('authBtn').className = 'logout-btn';
+                document.getElementById('profileName').textContent = name;
+                document.getElementById('profileNameInput').value = name;
+                document.getElementById('profileEmail').textContent = email;
+                document.getElementById('profileEmailInput').value = email;
+                
+                alert('✅ สมัครสมาชิกสำเร็จ! ยินดีต้อนรับสู่ NutriFriend');
+                showPage('home');
+            }, 2000);
+        }
+
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบใช่หรือไม่? (ข้อมูลจะยังคงอยู่)')) {
+                isLoggedIn = false;
+                currentUser = null;
+                myDashboardUser = null;
+                currentDashboardUser = null;
+                document.getElementById('authBtn').textContent = 'เข้าสู่ระบบ';
+                document.getElementById('authBtn').className = 'login-btn';
+                alert('👋 ออกจากระบบสำเร็จ');
+                showPage('home');
+            }
+        }
+
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            
+            if (!weight || !height) {
+                alert('⚠️ กรุณากรอกน้ำหนักและส่วนสูง');
+                return;
+            }
+            
+            const heightInMeters = height / 100;
+            const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+            
+            let category = '', advice = '', color = '';
+            
+            if (bmi < 18.5) {
+                category = 'น้ำหนักน้อย';
+                advice = 'ควรเพิ่มน้ำหนักและรับประทานอาหารที่มีประโยชน์';
+                color = '#2196f3';
+            } else if (bmi < 23) {
+                category = 'สมส่วน';
+                advice = 'น้ำหนักของคุณอยู่ในเกณฑ์ปกติ รักษาสุขภาพให้ดีต่อไป';
+                color = '#4caf50';
+            } else if (bmi < 25) {
+                category = 'น้ำหนักเกิน';
+                advice = 'ควรควบคุมอาหารและออกกำลังกายเพิ่มเติม';
+                color = '#ff9800';
+            } else if (bmi < 30) {
+                category = 'อ้วน';
+                advice = 'ควรปรึกษาแพทย์และวางแผนลดน้ำหนักอย่างจริงจัง';
+                color = '#ff5722';
+            } else {
+                category = 'อ้วนมาก';
+                advice = 'แนะนำให้ปรึกษาแพทย์เพื่อวางแผนการลดน้ำหนักที่เหมาะสม';
+                color = '#f44336';
+            }
+            
+            document.getElementById('bmiResult').classList.remove('hidden');
+            document.getElementById('bmiValue').textContent = bmi;
+            document.getElementById('bmiValue').style.color = color;
+            document.getElementById('bmiCategory').textContent = category;
+            document.getElementById('bmiCategory').style.color = color;
+            document.getElementById('bmiAdvice').textContent = advice;
+
+            const bmiRecord = {
+                bmi: parseFloat(bmi),
+                weight: weight,
+                height: height,
+                category: category,
+                timestamp: Date.now(),
+                date: new Date().toLocaleDateString('th-TH')
+            };
+
+            DB.saveBMIRecord(bmiRecord);
+            loadBMIHistory();
+        }
+
+        function loadBMIHistory() {
+            const history = DB.getBMIHistory();
+            const historyContainer = document.getElementById('bmiHistory');
+            
+            if (!historyContainer) return;
+
+            if (history.length === 0) {
+                historyContainer.innerHTML = '<p style="text-align: center; color: #757575; padding: 2rem;">ยังไม่มีประวัติการคำนวณ BMI</p>';
+                return;
+            }
+
+            const sortedHistory = history.sort((a, b) => b.timestamp - a.timestamp).slice(0, 5);
+            
+            historyContainer.innerHTML = sortedHistory.map(record => `
+                <div style="background: white; padding: 1rem; border-radius: 15px; margin-bottom: 1rem; border: 2px solid rgba(76, 175, 80, 0.2);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #4caf50;">BMI: ${record.bmi}</div>
+                            <div style="color: #757575; font-size: 0.9rem;">${record.date}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: bold; color: #2e7d32;">${record.category}</div>
+                            <div style="color: #757575; font-size: 0.9rem;">น้ำหนัก: ${record.weight} kg</div>
+                            <div style="color: #757575; font-size: 0.9rem;">ส่วนสูง: ${record.height} cm</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('profileNameInput').value;
+            const email = document.getElementById('profileEmailInput').value;
+            const age = document.getElementById('profileAge').value;
+            const weight = document.getElementById('profileWeight').value;
+            const height = document.getElementById('profileHeight').value;
+            
+            const profileData = {
+                name: name,
+                email: email,
+                age: parseInt(age),
+                weight: parseFloat(weight),
+                height: parseFloat(height),
+                updatedAt: new Date().toISOString()
+            };
+
+            const saved = DB.saveProfile(profileData);
+            
+            if (saved) {
+                document.getElementById('profileName').textContent = name;
+                document.getElementById('profileEmail').textContent = email;
+                currentUser = profileData;
+                myDashboardUser = name;
+                if (currentDashboardUser === myDashboardUser || !currentDashboardUser) {
+                    currentDashboardUser = myDashboardUser;
+                }
+                alert('✅ บันทึกข้อมูลสำเร็จ!');
+            } else {
+                alert('❌ เกิดข้อผิดพลาด');
+            }
+        }
+
+        function loadProfileFavorites() {
+            const favoritesContainer = document.getElementById('profileFavoriteFoods');
+            const favorites = DB.getFavoriteFoods();
+            
+            if (favorites.length === 0) {
+                favoritesContainer.innerHTML = `
+                    <div style="text-align: center; padding: 3rem 1rem; background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(129, 199, 132, 0.05)); border-radius: 20px; border: 2px dashed rgba(76, 175, 80, 0.3);">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🍽️</div>
+                        <p style="color: #757575; font-size: 1.1rem; margin-bottom: 0.5rem;">ยังไม่มีอาหารโปรด</p>
+                        <p style="color: #9e9e9e; font-size: 0.9rem;">ไปที่เมนูอาหารและกดหัวใจเพื่อเพิ่มอาหารโปรด ❤️</p>
+                    </div>
+                `;
+                return;
+            }
+
+            favoritesContainer.innerHTML = `
+                <div style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(129, 199, 132, 0.05)); padding: 1.5rem; border-radius: 20px; border: 2px solid rgba(76, 175, 80, 0.2);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 1.5rem;">❤️</span>
+                            <span style="font-weight: bold; color: #2e7d32; font-size: 1.1rem;">${favorites.length} รายการ</span>
+                        </div>
+                        <button onclick="if(confirm('ต้องการลบอาหารโปรดทั้งหมดหรือไม่?')) { clearAllFavorites(); }" 
+                                style="background: rgba(244, 67, 54, 0.1); border: none; color: #f44336; padding: 0.5rem 1rem; border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: bold; transition: all 0.3s;"
+                                onmouseover="this.style.background='#f44336'; this.style.color='white'"
+                                onmouseout="this.style.background='rgba(244, 67, 54, 0.1)'; this.style.color='#f44336'">
+                            🗑️ ลบทั้งหมด
+                        </button>
+                    </div>
+                    <div style="display: grid; gap: 1rem;">
+                        ${favorites.map(foodName => {
+                            const food = foods.find(f => f.name === foodName);
+                            if (!food) return '';
+                            
+                            return `
+                                <div style="background: white; border: 2px solid rgba(76, 175, 80, 0.3); border-radius: 15px; padding: 1.2rem; display: flex; align-items: center; gap: 1rem; transition: all 0.3s; cursor: pointer;" 
+                                     onclick="showFoodDetail('${food.name}')"
+                                     onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(76, 175, 80, 0.3)'"
+                                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                    <div style="font-size: 3rem;">${food.icon}</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: bold; color: #2e7d32; font-size: 1.2rem; margin-bottom: 0.3rem;">${food.name}</div>
+                                        <div style="color: #757575; font-size: 0.9rem;">🌍 ${food.origin}</div>
+                                        <div style="display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                                            <span style="background: rgba(76, 175, 80, 0.1); padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.85rem; color: #2e7d32;">
+                                                🔥 ${food.calories} kcal
+                                            </span>
+                                            <span style="background: rgba(33, 150, 243, 0.1); padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.85rem; color: #1976d2;">
+                                                💪 ${food.protein}g โปรตีน
+                                            </span>
+                                            <span style="background: rgba(255, 152, 0, 0.1); padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.85rem; color: #f57c00;">
+                                                🍞 ${food.carbs}g คาร์บ
+                                            </span>
+                                            <span style="background: rgba(156, 39, 176, 0.1); padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.85rem; color: #7b1fa2;">
+                                                🧈 ${food.fat}g ไขมัน
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <button onclick="event.stopPropagation(); removeFavoriteFromProfile('${foodName}')" 
+                                            style="background: rgba(244, 67, 54, 0.1); border: 2px solid rgba(244, 67, 54, 0.3); color: #f44336; padding: 0.6rem 1.2rem; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: bold; transition: all 0.3s; white-space: nowrap;"
+                                            onmouseover="this.style.background='#f44336'; this.style.color='white'; this.style.transform='scale(1.05)'"
+                                            onmouseout="this.style.background='rgba(244, 67, 54, 0.1)'; this.style.color='#f44336'; this.style.transform='scale(1)'">
+                                        ❌ ลบ
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function clearAllFavorites() {
+            const favorites = DB.getFavoriteFoods();
+            favorites.forEach(foodName => {
+                DB.removeFavoriteFood(foodName);
+            });
+            favoriteFoods = [];
+            loadProfileFavorites();
+            displayFoods();
+        }
+
+        function removeFavoriteFromProfile(foodName) {
+            if (confirm(`ต้องการลบ "${foodName}" ออกจากรายการโปรดหรือไม่?`)) {
+                DB.removeFavoriteFood(foodName);
+                favoriteFoods = favoriteFoods.filter(f => f !== foodName);
+                loadProfileFavorites();
+                
+                const foodPage = document.getElementById('foodPage');
+                if (foodPage) {
+                    displayFoods();
+                }
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ คุณแน่ใจหรือไม่ที่จะลบข้อมูลทั้งหมด? การกระทำนี้ไม่สามารถยกเลิกได้')) {
+                const cleared = DB.clearAllData();
+                if (cleared) {
+                    alert('✅ ลบข้อมูลทั้งหมดเรียบร้อยแล้ว');
+                    location.reload();
+                } else {
+                    alert('❌ เกิดข้อผิดพลาด');
+                }
+            }
+        }
+
+        // ===============================
+        // EXERCISE FUNCTIONS
+        // ===============================
+        
+        function loadExercisePage() {
+            const bmiHistory = DB.getBMIHistory();
+            const bmiInfo = document.getElementById('exerciseBMIInfo');
+            
+            if (bmiHistory.length > 0) {
+                const latestBMI = bmiHistory[bmiHistory.length - 1];
+                const recommendedExercises = exercises.filter(ex => 
+                    ex.bmiRecommend.includes(latestBMI.category)
+                );
+                
+                bmiInfo.innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                        <div style="font-size: 3rem; font-weight: bold; color: #4caf50;">${latestBMI.bmi}</div>
+                        <div style="font-size: 1.3rem; font-weight: bold; color: #2e7d32;">BMI ของคุณ: ${latestBMI.category}</div>
+                        <div style="color: #757575;">เราแนะนำการออกกำลังกาย ${recommendedExercises.length} แบบที่เหมาะกับคุณ</div>
+                        <button class="user-select-btn" onclick="showExerciseCategory('recommended')" style="background: linear-gradient(135deg, #4caf50, #66bb6a);">
+                            ✨ ดูแผนที่แนะนำ
+                        </button>
+                    </div>
+                `;
+            } else {
+                bmiInfo.innerHTML = `
+                    <p style="color: #757575; font-size: 1.1rem;">กรุณาคำนวณ BMI ของคุณก่อนเพื่อรับคำแนะนำที่เหมาะสม</p>
+                    <button class="btn-primary" onclick="showPage('bmi')" style="max-width: 300px; margin: 1rem auto 0;">ไปคำนวณ BMI</button>
+                `;
+            }
+            
+            displayExercises('all');
+        }
+
+        function showExerciseCategory(category) {
+            currentExerciseCategory = category;
+            displayExercises(category);
+        }
+
+        function displayExercises(category) {
+            const exerciseGrid = document.getElementById('exerciseGrid');
+            let filteredExercises = exercises;
+            
+            if (category === 'recommended') {
+                const bmiHistory = DB.getBMIHistory();
+                if (bmiHistory.length > 0) {
+                    const latestBMI = bmiHistory[bmiHistory.length - 1];
+                    filteredExercises = exercises.filter(ex => 
+                        ex.bmiRecommend.includes(latestBMI.category)
+                    );
+                }
+            } else if (category !== 'all') {
+                filteredExercises = exercises.filter(ex => ex.category === category);
+            }
+            
+            exerciseGrid.innerHTML = filteredExercises.map(exercise => {
+                const difficultyColor = exercise.difficulty === 'ง่าย' ? '#4caf50' : 
+                                       exercise.difficulty === 'ปานกลาง' ? '#ff9800' : '#f44336';
+                const categoryColor = exercise.category === 'cardio' ? '#e91e63' :
+                                     exercise.category === 'strength' ? '#3f51b5' :
+                                     exercise.category === 'flexibility' ? '#00bcd4' : '#9c27b0';
+                
+                return `
+                    <div class="food-card" onclick="showExerciseDetail('${exercise.name}')">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div style="font-size: 3rem;">${exercise.icon}</div>
+                            <div style="background: ${difficultyColor}; color: white; padding: 0.3rem 0.8rem; border-radius: 10px; font-size: 0.8rem; font-weight: bold;">
+                                ${exercise.difficulty}
+                            </div>
+                        </div>
+                        <div style="font-size: 1.3rem; font-weight: bold; color: #2e7d32; margin-bottom: 0.5rem; text-align: center;">${exercise.name}</div>
+                        <div style="text-align: center; color: #757575; font-size: 0.9rem; margin-bottom: 1rem;">${exercise.description}</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem;">
+                            <div style="background: rgba(76, 175, 80, 0.1); padding: 0.7rem; border-radius: 10px; text-align: center;">
+                                <div style="font-size: 1.2rem; font-weight: bold; color: #4caf50;">${exercise.duration}</div>
+                                <div style="font-size: 0.75rem; color: #757575;">ระยะเวลา</div>
+                            </div>
+                            <div style="background: rgba(76, 175, 80, 0.1); padding: 0.7rem; border-radius: 10px; text-align: center;">
+                                <div style="font-size: 1.2rem; font-weight: bold; color: #4caf50;">${exercise.calories}</div>
+                                <div style="font-size: 0.75rem; color: #757575;">แคลอรี่</div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <span style="background: ${categoryColor}; color: white; padding: 0.3rem 1rem; border-radius: 10px; font-size: 0.8rem; font-weight: bold;">
+                                ${exercise.category === 'cardio' ? '🏃 คาร์ดิโอ' :
+                                  exercise.category === 'strength' ? '💪 กล้ามเนื้อ' :
+                                  exercise.category === 'flexibility' ? '🧘 ยืดเหยียด' : '⚖️ ทรงตัว'}
+                            </span>
+                        </div>
+                        <div style="text-align: center; margin-top: 1rem; color: #4caf50; font-weight: bold; font-size: 0.9rem; cursor: pointer;">
+                            คลิกเพื่อดูรายละเอียด →
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showExerciseDetail(exerciseName) {
+            const exercise = exercises.find(ex => ex.name === exerciseName);
+            if (!exercise) return;
+
+            const modal = document.getElementById('exerciseModal');
+            const modalBody = document.getElementById('exerciseModalBody');
+            
+            const difficultyColor = exercise.difficulty === 'ง่าย' ? '#4caf50' : 
+                                   exercise.difficulty === 'ปานกลาง' ? '#ff9800' : '#f44336';
+            
+            modalBody.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 5rem; margin-bottom: 1rem;">${exercise.icon}</div>
+                    <h3 style="font-size: 2.5rem; color: #4caf50; margin-bottom: 0.5rem;">${exercise.name}</h3>
+                    <p style="font-size: 1.1rem; color: #757575; margin-bottom: 1rem;">${exercise.description}</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <span style="background: ${difficultyColor}; color: white; padding: 0.5rem 1.5rem; border-radius: 15px; font-size: 1rem;">
+                            ระดับ: ${exercise.difficulty}
+                        </span>
+                        <span style="background: linear-gradient(135deg, #2196f3, #64b5f6); color: white; padding: 0.5rem 1.5rem; border-radius: 15px; font-size: 1rem;">
+                            ⏱️ ${exercise.duration}
+                        </span>
+                        <span style="background: linear-gradient(135deg, #ff9800, #ffb74d); color: white; padding: 0.5rem 1.5rem; border-radius: 15px; font-size: 1rem;">
+                            🔥 ${exercise.calories} kcal
+                        </span>
+                    </div>
+                </div>
+                
+                <h4 style="color: #4caf50; font-size: 1.8rem; margin-bottom: 1rem;">📝 ขั้นตอนการออกกำลังกาย</h4>
+                <div style="background: rgba(76, 175, 80, 0.05); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem; border: 2px solid rgba(76, 175, 80, 0.2);">
+                    ${exercise.steps.map((step, index) => `
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem; align-items: start;">
+                            <div style="background: #4caf50; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">
+                                ${index + 1}
+                            </div>
+                            <div style="flex: 1; padding-top: 0.3rem; color: #2e7d32; font-size: 1.1rem;">
+                                ${step}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <h4 style="color: #ff9800; font-size: 1.5rem; margin-bottom: 1rem;">💡 เหมาะสำหรับ</h4>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                    ${exercise.bmiRecommend.map(bmi => `
+                        <span style="background: rgba(255, 152, 0, 0.1); color: #f57c00; padding: 0.5rem 1rem; border-radius: 10px; border: 2px solid rgba(255, 152, 0, 0.3); font-size: 0.9rem;">
+                            ✓ ${bmi}
+                        </span>
+                    `).join('')}
+                </div>
+                
+                <div style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1)); padding: 1.5rem; border-radius: 15px; border: 2px solid rgba(76, 175, 80, 0.3);">
+                    <h4 style="color: #2196f3; margin-bottom: 0.5rem;">⚠️ คำแนะนำ</h4>
+                    <ul style="color: #616161; line-height: 1.8; margin-left: 1.5rem;">
+                        <li>อบอุ่นร่างกายก่อนออกกำลังกายทุกครั้ง</li>
+                        <li>ดื่มน้ำให้เพียงพอระหว่างออกกำลังกาย</li>
+                        <li>หยุดทันทีหากรู้สึกเจ็บหรือไม่สบาย</li>
+                        <li>ปรึกษาแพทย์หากมีปัญหาสุขภาพ</li>
+                    </ul>
+                </div>
+                
+                <button class="btn-primary" onclick="closeExerciseModal()" style="margin-top: 2rem;">ปิด</button>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeExerciseModal() {
+            document.getElementById('exerciseModal').classList.remove('active');
+        }
+
+        function showUserProfile(userName) {
+            const modal = document.getElementById('userProfileModal');
+            const modalBody = document.getElementById('userProfileBody');
+            
+            const userStats = sampleUsers[userName];
+            
+            if (!userStats) return;
+            
+            modalBody.innerHTML = `
+                <div class="user-profile-header">
+                    <div class="user-avatar">${userStats.icon}</div>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;">${userStats.name}</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.9;">สมาชิกตั้งแต่ ${userStats.memberSince}</p>
+                </div>
+
+                <div style="background: white; padding: 2rem; border-radius: 20px; margin-bottom: 1.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #4caf50; margin-bottom: 1.5rem; font-size: 1.5rem;">📊 ข้อมูลส่วนตัว</h3>
+                    <div class="stat-grid">
+                        <div class="stat-item">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #4caf50;">${userStats.age}</div>
+                            <div style="color: #757575;">ปี</div>
+                        </div>
+                        <div class="stat-item">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #4caf50;">${userStats.weight}</div>
+                            <div style="color: #757575;">kg</div>
+                        </div>
+                        <div class="stat-item">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #4caf50;">${userStats.height}</div>
+                            <div style="color: #757575;">cm</div>
+                        </div>
+                        <div class="stat-item">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #4caf50;">${userStats.bmi}</div>
+                            <div style="color: #757575;">BMI</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 2rem; border-radius: 20px; margin-bottom: 1.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #ff9800; margin-bottom: 1.5rem; font-size: 1.5rem;">🏅 ความสำเร็จ</h3>
+                    <div style="display: grid; gap: 0.8rem;">
+                        ${userStats.achievements.map(achievement => `
+                            <div style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(255, 152, 0, 0.1)); padding: 1rem; border-radius: 12px; font-size: 1rem; border: 2px solid rgba(76, 175, 80, 0.2);">
+                                ${achievement}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 2rem; border-radius: 20px; margin-bottom: 1.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #9c27b0; margin-bottom: 1.5rem; font-size: 1.5rem;">📈 สถิติการใช้งาน</h3>
+                    <div class="stat-grid">
+                        <div class="stat-item">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #4caf50;">${userStats.totalWorkouts}</div>
+                            <div style="color: #757575;">ครั้งออกกำลังกาย</div>
+                        </div>
+                        <div class="stat-item">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #4caf50;">${userStats.weeklyCalories}</div>
+                            <div style="color: #757575;">แคลอรี่/วัน</div>
+                        </div>
+                        <div class="stat-item">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #4caf50;">${userStats.weeklyProtein}</div>
+                            <div style="color: #757575;">โปรตีน/วัน (g)</div>
+                        </div>
+                        <div class="stat-item">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #4caf50;">${userStats.favoriteFoods.length}</div>
+                            <div style="color: #757575;">อาหารโปรด</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 2rem; border-radius: 20px; margin-bottom: 1.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #2196f3; margin-bottom: 1.5rem; font-size: 1.5rem;">🍽️ อาหารโปรด</h3>
+                    <div style="display: grid; gap: 0.8rem;">
+                        ${userStats.favoriteFoods.map(food => `
+                            <div style="background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 12px; border: 2px solid rgba(76, 175, 80, 0.2);">
+                                ${food}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #4caf50; margin-bottom: 1.5rem; font-size: 1.5rem;">📊 ประวัติ BMI ล่าสุด</h3>
+                    ${userStats.recentBMI.map(record => `
+                        <div style="background: rgba(76, 175, 80, 0.05); padding: 1rem; border-radius: 12px; margin-bottom: 0.8rem; border: 2px solid rgba(76, 175, 80, 0.2); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: bold; color: #2e7d32;">${record.date}</div>
+                                <div style="color: #757575; font-size: 0.9rem;">${record.category}</div>
+                            </div>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #4caf50;">BMI: ${record.bmi}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeUserProfileModal() {
+            document.getElementById('userProfileModal').classList.remove('active');
+        }
+
+        // Initialize app
+        initApp();
+    </script>
+</body>
+</html>
